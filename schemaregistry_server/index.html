@@ -421,8 +421,8 @@
                 
                 <h1 id="schema-registry-server">Schema Registry Server</h1>
 <p>This section provides you just an introduction about the <code>Schema Server</code>.</p>
-<p>Schema Registry provides a serving layer for your metadata. It provides a RESTful interface for storing and retrieving Avro schemas. It stores a versioned history of all schemas, provides multiple compatibility settings and allows evolution of schemas according to the configured compatibility settings and expanded Avro support. It provides serializers that plug into Apache Kafka® clients that handle schema storage and retrieval for Kafka messages that are sent in the Avro format.</p>
-<p>Schema Registry is a distributed storage layer for Avro Schemas which uses Kafka as its underlying storage mechanism. Some key design decisions:</p>
+<p>Schema Registry provides a serving layer for your metadata. It provides a RESTful interface for storing and retrieving Avro or JSON schemas. It stores a versioned history of all schemas, provides multiple compatibility settings and allows evolution of schemas according to the configured compatibility settings and expanded Avro or JSON support. It provides serializers that plug into Apache Kafka® clients that handle schema storage and retrieval for Kafka messages that are sent in the Avro or JSON format.</p>
+<p>Schema Registry is a distributed storage layer for Avro or JSON Schemas which uses Kafka as its underlying storage mechanism. Some key design decisions:</p>
 <ol>
 <li>Assigns globally unique ID to each registered schema. Allocated IDs are guaranteed to be monotonically increasing but not necessarily consecutive.</li>
 <li>Kafka provides the durable backend, and functions as a write-ahead changelog for the state of Schema Registry and the schemas it contains.</li>
@@ -433,10 +433,10 @@
 <p><code>GET /schemas/ids/{int: id}</code> - Get the schema string identified by the input ID</p>
 <h3 id="subjects">Subjects</h3>
 <p><code>GET /subjects</code> - Get a list of registered subjects. <em>[Missing]</em></p>
-<p><code>GET /subjects/(string: subject)/versions</code> - Get a list of versions registered under the specified subject <em>[Missing]</em> </p>
+<p><code>GET /subjects/(string: subject)/versions</code> - Get a list of versions registered under the specified subject <em>[Missing]</em></p>
 <p><code>DELETE /subjects/(string: subject)</code> - Deletes the specified subject and its associated compatibility level if registered. It is recommended to use this API only when a topic needs to be recycled or in development environment.</p>
 <p><code>GET /subjects/(string: subject)/versions/(versionId: version)</code> - Get a specific version of the schema registered under this subject <em>Check response</em></p>
-<p><code>GET /subjects/(string: subject)/versions/(versionId: version)/schema</code> - Get the avro schema for the specified version of this subject. The unescaped schema only is returned. <em>[Missing]</em></p>
+<p><code>GET /subjects/(string: subject)/versions/(versionId: version)/schema</code> - Get the avro or json schema for the specified version of this subject. The unescaped schema only is returned. <em>[Missing]</em></p>
 <p><code>POST /subjects/(string: subject)/versions</code> - Register a new schema under the specified subject and receive a schema id</p>
 <p><code>POST /subjects/(string: subject)</code> - Check if a schema has already been registered under the specified subject. If so, this returns the schema string along with its globally unique identifier, its version under this subject and the subject name.</p>
 <p><code>DELETE /subjects/(string: subject)/versions/(versionId: version)</code> - Deletes a specific version of the schema registered under this subject. This only deletes the version and the schema ID remains intact making it still possible to decode data using the schema ID. This API is recommended to be used only in development environments or under extreme circumstances where-in, its required to delete a previously registered schema for compatibility purposes or re-register previously registered schema. <em>[Missing]</em></p>

@@ -228,16 +228,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
+  <a href="#avro-schema-usage" class="md-nav__link">
+    Avro Schema Usage
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-with-dataclasses-avroschema" class="md-nav__link">
-    Usage with dataclasses-avroschema
+  <a href="#json-schema-usage" class="md-nav__link">
+    JSON Schema Usage
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-with-dataclasses-avroschema-for-avro-schemas" class="md-nav__link">
+    Usage with dataclasses-avroschema for avro schemas
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage with dataclasses-avroschema for avro schemas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage-with-pydantic-for-json-schemas" class="md-nav__link">
+    Usage with pydantic for json schemas
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -374,16 +394,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
+  <a href="#avro-schema-usage" class="md-nav__link">
+    Avro Schema Usage
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-with-dataclasses-avroschema" class="md-nav__link">
-    Usage with dataclasses-avroschema
+  <a href="#json-schema-usage" class="md-nav__link">
+    JSON Schema Usage
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-with-dataclasses-avroschema-for-avro-schemas" class="md-nav__link">
+    Usage with dataclasses-avroschema for avro schemas
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage with dataclasses-avroschema for avro schemas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage-with-pydantic-for-json-schemas" class="md-nav__link">
+    Usage with pydantic for json schemas
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -426,7 +466,7 @@
 <a href="https://github.com/marcosschroh/python-schema-registry-client/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/marcosschroh/python-schema-registry-client.svg" /></a>
 <a href="https://codecov.io/gh/marcosschroh/python-schema-registry-client"><img alt="codecov" src="https://codecov.io/gh/marcosschroh/python-schema-registry-client/branch/master/graph/badge.svg" /></a>
 <a href="https://img.shields.io/badge/python-3.6%20%7C%203.7-blue.svg"><img alt="Python Version" src="https://img.shields.io/badge/python-3.6%20%7C%203.7-blue.svg" /></a></p>
-<p>Python Rest Client to interact against <a href="https://docs.confluent.io/current/schema-registry/index.html">schema-registry</a> confluent server to manage <a href="https://docs.oracle.com/database/nosql-12.1.3.1/GettingStartedGuide/avroschemas.html">Avro Schemas</a> resources.</p>
+<p>Python Rest Client to interact against <a href="https://docs.confluent.io/current/schema-registry/index.html">schema-registry</a> confluent server to manage <a href="https://docs.oracle.com/database/nosql-12.1.3.1/GettingStartedGuide/avroschemas.html">Avro</a> and <a href="https://json-schema.org/">JSON</a> schemas resources.</p>
 <h2 id="requirements">Requirements</h2>
 <p>python 3.6+</p>
 <h2 id="installation">Installation</h2>
@@ -439,7 +479,7 @@
 </code></pre></div>
 
 
-<h2 id="usage">Usage</h2>
+<h2 id="avro-schema-usage">Avro Schema Usage</h2>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span><span class="p">,</span> <span class="n">schema</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8081&quot;</span><span class="p">)</span>
@@ -483,7 +523,59 @@
 </code></pre></div>
 
 
-<h2 id="usage-with-dataclasses-avroschema">Usage with dataclasses-avroschema</h2>
+<h2 id="json-schema-usage">JSON Schema Usage</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span><span class="p">,</span> <span class="n">schema</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8081&quot;</span><span class="p">)</span>
+
+<span class="n">deployment_schema</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;definitions&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;JsonDeployment&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;required&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;replicas&quot;</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;properties&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;image&quot;</span> <span class="p">:</span>       <span class="p">{</span><span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;replicas&quot;</span> <span class="p">:</span>    <span class="p">{</span><span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;port&quot;</span> <span class="p">:</span>        <span class="p">{</span><span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;$ref&quot;</span> <span class="p">:</span> <span class="s2">&quot;#/definitions/JsonDeployment&quot;</span>
+<span class="p">}</span>
+
+<span class="n">json_schema</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">JsonSchema</span><span class="p">(</span><span class="n">deployment_schema</span><span class="p">)</span>
+
+<span class="n">schema_id</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;test-deployment&quot;</span><span class="p">,</span> <span class="n">json_schema</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>or async</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">AsyncSchemaRegistryClient</span><span class="p">,</span> <span class="n">schema</span>
+
+<span class="n">async_client</span> <span class="o">=</span> <span class="n">AsyncSchemaRegistryClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8081&quot;</span><span class="p">)</span>
+
+<span class="n">deployment_schema</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;definitions&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;JsonDeployment&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;required&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;replicas&quot;</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;properties&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;image&quot;</span> <span class="p">:</span>       <span class="p">{</span><span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;replicas&quot;</span> <span class="p">:</span>    <span class="p">{</span><span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">},</span>
+                <span class="s2">&quot;port&quot;</span> <span class="p">:</span>        <span class="p">{</span><span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;$ref&quot;</span> <span class="p">:</span> <span class="s2">&quot;#/definitions/JsonDeployment&quot;</span>
+<span class="p">}</span>
+
+<span class="n">json_schema</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">JsonSchema</span><span class="p">(</span><span class="n">deployment_schema</span><span class="p">)</span>
+
+<span class="n">schema_id</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_client</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;test-deployment&quot;</span><span class="p">,</span> <span class="n">json_schema</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h2 id="usage-with-dataclasses-avroschema-for-avro-schemas">Usage with dataclasses-avroschema for avro schemas</h2>
 <p>You can generate the <code>avro schema</code> directely from a python class using <a href="https://github.com/marcosschroh/dataclasses-avroschema">dataclasses-avroschema</a>
 and use it in the API for <code>register schemas</code>, <code>check versions</code> and <code>test compatibility</code>:</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">dataclasses</span>
@@ -517,6 +609,51 @@ and use it in the API for <code>register schemas</code>, <code>check versions</c
 <span class="c1"># &gt;&gt;&gt; SchemaVersion(subject=&#39;dataclasses-avroschema-subject-2&#39;, schema_id=12, schema=1, version={&quot;type&quot;:&quot;record&quot; ...&#39;)</span>
 
 <span class="n">compatibility</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">test_compatibility</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">UserAdvance</span><span class="o">.</span><span class="n">avro_schema</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">compatibility</span><span class="p">)</span>
+
+<span class="c1"># &gt;&gt;&gt; True</span>
+</code></pre></div>
+
+
+<h3 id="usage-with-pydantic-for-json-schemas">Usage with pydantic for json schemas</h3>
+<p>You can generate the json schema directely from a python class using pydantic and use it in the API for register schemas, check versions and test compatibility:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">typing</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8081&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ColorEnum</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+  <span class="n">BLUE</span> <span class="o">=</span> <span class="s2">&quot;BLUE&quot;</span>
+  <span class="n">YELLOW</span> <span class="o">=</span> <span class="s2">&quot;YELLOW&quot;</span>
+  <span class="n">GREEN</span> <span class="o">=</span> <span class="s2">&quot;GREEN&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">UserAdvance</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">pets</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;dog&quot;</span><span class="p">,</span> <span class="s2">&quot;cat&quot;</span><span class="p">]</span>
+    <span class="n">accounts</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+    <span class="n">has_car</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">favorite_colors</span><span class="p">:</span> <span class="n">ColorEnum</span> <span class="o">=</span> <span class="n">ColorEnum</span><span class="o">.</span><span class="n">BLUE</span>
+    <span class="n">country</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Argentina&quot;</span>
+    <span class="n">address</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># register the schema</span>
+<span class="n">schema_id</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">UserAdvance</span><span class="o">.</span><span class="n">schema_json</span><span class="p">(),</span> <span class="n">schema_type</span><span class="o">=</span><span class="s2">&quot;JSON&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">schema_id</span><span class="p">)</span>
+<span class="c1"># &gt;&gt;&gt; 12</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">check_version</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">UserAdvance</span><span class="o">.</span><span class="n">schema_json</span><span class="p">(),</span> <span class="n">schema_type</span><span class="o">=</span><span class="s2">&quot;JSON&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="c1"># &gt;&gt;&gt; SchemaVersion(subject=&#39;pydantic-jsonschema-subject&#39;, schema_id=12, schema=1, version=&lt;schema_registry.client.schema.JsonSchema object at 0x7f40354550a0&gt;)</span>
+
+<span class="n">compatibility</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">test_compatibility</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">UserAdvance</span><span class="o">.</span><span class="n">schema_json</span><span class="p">(),</span> <span class="n">schema_type</span><span class="o">=</span><span class="s2">&quot;JSON&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">compatibility</span><span class="p">)</span>
 
 <span class="c1"># &gt;&gt;&gt; True</span>

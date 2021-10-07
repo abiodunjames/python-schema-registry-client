@@ -250,16 +250,23 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#avro-schemas-custom-codecs-and-serializers" class="md-nav__link">
-    Avro Schemas, Custom Codecs and Serializers
+  <a href="#schemas-custom-codecs-and-serializers" class="md-nav__link">
+    Schemas, Custom Codecs and Serializers
   </a>
   
-    <nav class="md-nav" aria-label="Avro Schemas, Custom Codecs and Serializers">
+    <nav class="md-nav" aria-label="Schemas, Custom Codecs and Serializers">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage-with-dataclasses-avroschema" class="md-nav__link">
-    Usage with dataclasses-avroschema
+  <a href="#usage-with-dataclasses-avroschema-for-avro-schemas" class="md-nav__link">
+    Usage with dataclasses-avroschema for avro schemas
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-with-pydantic-for-json-schemas" class="md-nav__link">
+    Usage with pydantic for json schemas
   </a>
   
 </li>
@@ -338,16 +345,23 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#avro-schemas-custom-codecs-and-serializers" class="md-nav__link">
-    Avro Schemas, Custom Codecs and Serializers
+  <a href="#schemas-custom-codecs-and-serializers" class="md-nav__link">
+    Schemas, Custom Codecs and Serializers
   </a>
   
-    <nav class="md-nav" aria-label="Avro Schemas, Custom Codecs and Serializers">
+    <nav class="md-nav" aria-label="Schemas, Custom Codecs and Serializers">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usage-with-dataclasses-avroschema" class="md-nav__link">
-    Usage with dataclasses-avroschema
+  <a href="#usage-with-dataclasses-avroschema-for-avro-schemas" class="md-nav__link">
+    Usage with dataclasses-avroschema for avro schemas
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-with-pydantic-for-json-schemas" class="md-nav__link">
+    Usage with pydantic for json schemas
   </a>
   
 </li>
@@ -379,11 +393,12 @@
                 
                 <h1 id="how-to-use-it-with-faust">How to use it with Faust</h1>
 <p>This section describe how integrate this library with <a href="https://faust.readthedocs.io/en/latest/">Faust</a></p>
-<h2 id="avro-schemas-custom-codecs-and-serializers">Avro Schemas, Custom Codecs and Serializers</h2>
-<p>Because we want to be sure that the message that we encode are valid, we use <a href="https://docs.oracle.com/database/nosql-12.1.3.1/GettingStartedGuide/avroschemas.html">Avro Schemas</a>. Also, <a href="https://medium.com/@stephane.maarek/introduction-to-schemas-in-apache-kafka-with-the-confluent-schema-registry-3bf55e401321">Introduction to Schemas in Apache Kafka with the Confluent Schema Registry</a> is a good post to start with <code>schemas</code>.
-Avro is used to define the data schema for a record's value. This schema describes the fields allowed in the value, along with their data types.</p>
-<p>In order to use <code>avro schemas</code> with <code>Faust</code>, we need to define a custom codec and a custom serializer able to talk with the <code>schema-registry</code>, and to do that, we will use the <code>MessageSerializer</code>.</p>
-<p>For our demonstration, let's imagine that we have the folling <code>schema</code>:</p>
+<h2 id="schemas-custom-codecs-and-serializers">Schemas, Custom Codecs and Serializers</h2>
+<p>Because we want to be sure that the message that we encode are valid, we can use <a href="https://docs.oracle.com/database/nosql-12.1.3.1/GettingStartedGuide/avroschemas.html">Avro</a> or <a href="https://json-schema.org/">JSON</a> schemas. Also, <a href="https://medium.com/@stephane.maarek/introduction-to-schemas-in-apache-kafka-with-the-confluent-schema-registry-3bf55e401321">Introduction to Schemas in Apache Kafka with the Confluent Schema Registry</a> is a good post to start with <code>schemas</code>.
+Avro and JSON can be used to define the data schema for a record's value. This schema describes the fields allowed in the value, along with their data types.</p>
+<p>In order to use <code>avro schemas</code> or <code>json schemas</code> with <code>Faust</code>, we need to define a custom codec and a custom serializer able to talk with the <code>schema-registry</code>, and to do that, we will use the <code>MessageSerializer</code>.</p>
+<p>For serializing <code>avro schemas</code> we should use the <code>FaustSerializer</code>. For serializing <code>json schemas</code> we should use the <code>FaustJsonSerializer</code>.</p>
+<p>For our demonstration, let's imagine that we have the following <code>avro schema</code>:</p>
 <div class="codehilite"><pre><span></span><code><span class="p">{</span>
     <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;record&quot;</span><span class="p">,</span>
     <span class="nt">&quot;namespace&quot;</span><span class="p">:</span> <span class="s2">&quot;com.example&quot;</span><span class="p">,</span>
@@ -404,7 +419,7 @@ Avro is used to define the data schema for a record's value. This schema describ
 <span class="c1"># create an instance of the `SchemaRegistryClient`</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">SCHEMA_REGISTRY_URL</span><span class="p">)</span>
 
-<span class="c1"># schema that we want to use. For this example we </span>
+<span class="c1"># schema that we want to use. For this example we</span>
 <span class="c1"># are using a dict, but this schema could be located in a file called avro_user_schema.avsc</span>
 <span class="n">avro_user_schema</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">AvroSchema</span><span class="p">({</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;record&quot;</span><span class="p">,</span>
@@ -479,7 +494,7 @@ Avro is used to define the data schema for a record's value. This schema describ
 
 
 <p>The full example is <a href="https://github.com/marcosschroh/faust-docker-compose-example/blob/master/faust-project/example/codecs/avro.py">here</a></p>
-<h3 id="usage-with-dataclasses-avroschema">Usage with dataclasses-avroschema</h3>
+<h3 id="usage-with-dataclasses-avroschema-for-avro-schemas">Usage with dataclasses-avroschema for avro schemas</h3>
 <p>You can also use this funcionality with <a href="https://github.com/marcosschroh/dataclasses-avroschema">dataclasses-avroschema</a> and you won't have to provide the avro schema.
 The only thing that you need to do is add the <code>AvroModel</code> class and use its methods:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># users.models</span>
@@ -488,7 +503,7 @@ The only thing that you need to do is add the <code>AvroModel</code> class and u
 <span class="kn">from</span> <span class="nn">dataclasses_avroschema</span> <span class="kn">import</span> <span class="n">AvroModel</span>
 
 
-<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">faust</span><span class="o">.</span><span class="n">Record</span><span class="p">,</span> <span class="n">AvroModel</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="s1">&#39;avro_users&#39;</span><span class="p">):</span>  
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">faust</span><span class="o">.</span><span class="n">Record</span><span class="p">,</span> <span class="n">AvroModel</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="s1">&#39;avro_users&#39;</span><span class="p">):</span>
     <span class="n">first_name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">last_name</span><span class="p">:</span> <span class="nb">str</span>
 
@@ -507,6 +522,37 @@ The only thing that you need to do is add the <code>AvroModel</code> class and u
 <span class="c1"># function used to register the codec</span>
 <span class="k">def</span> <span class="nf">avro_user_codec</span><span class="p">():</span>
     <span class="k">return</span> <span class="n">avro_user_serializer</span>
+</code></pre></div>
+
+
+<h3 id="usage-with-pydantic-for-json-schemas">Usage with pydantic for json schemas</h3>
+<p>You can also use this funcionality with <a href="https://github.com/samuelcolvin/pydantic">dataclasses-pydantic</a> and you won't have to provide the json schema.
+The only thing that you need to do is add the <code>BaseModel</code> class and use its methods:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># users.models</span>
+<span class="kn">import</span> <span class="nn">faust</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+
+<span class="k">class</span> <span class="nc">UserModel</span><span class="p">(</span><span class="n">faust</span><span class="o">.</span><span class="n">Record</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">serializer</span><span class="o">=</span><span class="s1">&#39;json_users&#39;</span><span class="p">):</span>
+    <span class="n">first_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">last_name</span><span class="p">:</span> <span class="nb">str</span>
+
+
+<span class="c1"># codecs.codec.py</span>
+<span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span><span class="p">,</span> <span class="n">schema</span>
+<span class="kn">from</span> <span class="nn">schema_registry.serializers</span> <span class="kn">import</span> <span class="n">FaustJsonSerializer</span>
+
+<span class="kn">from</span> <span class="nn">users.models</span> <span class="kn">import</span> <span class="n">UserModel</span>
+
+<span class="c1"># create an instance of the `SchemaRegistryClient`</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">SCHEMA_REGISTRY_URL</span><span class="p">)</span>
+
+<span class="n">json_user_serializer</span> <span class="o">=</span> <span class="n">FaustJsonSerializer</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="n">UserModel</span><span class="o">.</span><span class="n">schema_json</span><span class="p">())</span>  <span class="c1"># usign the method schema_json to get the json schema representation</span>
+
+<span class="c1"># function used to register the codec</span>
+<span class="k">def</span> <span class="nf">json_user_codec</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">json_user_serializer</span>
 </code></pre></div>
                 
               

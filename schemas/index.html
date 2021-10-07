@@ -262,8 +262,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#baseschema" class="md-nav__link">
+    BaseSchema
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#avroschema" class="md-nav__link">
     AvroSchema
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jsonschema" class="md-nav__link">
+    JsonSchema
   </a>
   
 </li>
@@ -332,8 +346,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#baseschema" class="md-nav__link">
+    BaseSchema
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#avroschema" class="md-nav__link">
     AvroSchema
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jsonschema" class="md-nav__link">
+    JsonSchema
   </a>
   
 </li>
@@ -366,14 +394,49 @@
                 
                 
                 <h1 id="schemas">Schemas</h1>
+<h2 id="baseschema">BaseSchema</h2>
+<p><code>BaseSchema</code> an abstract base class from which <code>AvroSchema</code> and <code>JsonSchema</code> inherit.
+Requires concrete classes implement the following methods.</p>
+<div class="codehilite"><pre><span></span><code>    @abstractmethod
+    def parse_schema(self, schema: typing.Dict) -&gt; typing.Dict:
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def load(fp: str) -&gt; BaseSchema:
+        &quot;&quot;&quot;Parse a schema from a file path&quot;&quot;&quot;
+        pass
+
+    @staticmethod
+    @abstractmethod
+    async def async_load(fp: str) -&gt; BaseSchema:
+        &quot;&quot;&quot;Parse a schema from a file path&quot;&quot;&quot;
+        pass
+
+    @property
+    @abstractmethod
+    def name(self) -&gt; typing.Optional[str]:
+        pass
+
+    @property
+    @abstractmethod
+    def schema_type(self) -&gt; str:
+        pass
+</code></pre></div>
+
+
 <h2 id="avroschema">AvroSchema</h2>
 <p><code>AvroSchema</code> parses strings into avro schemas to assure validation. Properties:</p>
 <p><code>raw_schema</code>: The input string that will be parsed</p>
 <p><code>schema</code>: Result of parsing the raw_schema with <code>fastavro</code></p>
 <p><code>flat_schema</code>: Parsed schema without <code>__fastavro_parsed</code> flag</p>
 <p><code>expanded_schema</code>: Parsed schema where all named types are expanded to their real schema</p>
+<h2 id="jsonschema">JsonSchema</h2>
+<p><code>JsonSchema</code> parses strings into json schemas to assure validation. Properties:</p>
+<p><code>raw_schema</code>: The input string that will be parsed</p>
+<p><code>schema</code>: Result of parsing the raw_schema with <code>jsonschema.Draft7Validator.check_schema</code></p>
 <h2 id="schemaversion">SchemaVersion</h2>
-<p><code>SchemaVersion</code> is a <code>namedtuple</code> that contains the <code>subject</code>, <code>schema_id</code>, <code>version</code> and <code>AvroSchema</code>.</p>
+<p><code>SchemaVersion</code> is a <code>namedtuple</code> that contains the <code>subject</code>, <code>schema_id</code>, <code>version</code> and either <code>AvroSchema</code> or <code>JsonSchema</code>.</p>
 <p>The <code>SchemaVersion</code> is returned by <code>get_schema</code> and <code>check_version</code> client methods</p>
                 
               

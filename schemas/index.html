@@ -397,31 +397,31 @@
 <h2 id="baseschema">BaseSchema</h2>
 <p><code>BaseSchema</code> an abstract base class from which <code>AvroSchema</code> and <code>JsonSchema</code> inherit.
 Requires concrete classes implement the following methods.</p>
-<div class="codehilite"><pre><span></span><code>    @abstractmethod
-    def parse_schema(self, schema: typing.Dict) -&gt; typing.Dict:
-        pass
+<div class="codehilite"><pre><span></span><code><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">parse_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span><span class="p">:</span>
+    <span class="k">pass</span>
 
-    @staticmethod
-    @abstractmethod
-    def load(fp: str) -&gt; BaseSchema:
-        &quot;&quot;&quot;Parse a schema from a file path&quot;&quot;&quot;
-        pass
+<span class="nd">@staticmethod</span>
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">fp</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BaseSchema</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Parse a schema from a file path&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
 
-    @staticmethod
-    @abstractmethod
-    async def async_load(fp: str) -&gt; BaseSchema:
-        &quot;&quot;&quot;Parse a schema from a file path&quot;&quot;&quot;
-        pass
+<span class="nd">@staticmethod</span>
+<span class="nd">@abstractmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">async_load</span><span class="p">(</span><span class="n">fp</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BaseSchema</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Parse a schema from a file path&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
 
-    @property
-    @abstractmethod
-    def name(self) -&gt; typing.Optional[str]:
-        pass
+<span class="nd">@property</span>
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">pass</span>
 
-    @property
-    @abstractmethod
-    def schema_type(self) -&gt; str:
-        pass
+<span class="nd">@property</span>
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">schema_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">pass</span>
 </code></pre></div>
 
 

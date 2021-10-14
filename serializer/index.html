@@ -51,7 +51,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#message-serializer" class="md-skip">
+        <a href="#message-serializers" class="md-skip">
           Skip to content
         </a>
       
@@ -238,8 +238,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
+  <a href="#usage-for-avro-schemas" class="md-nav__link">
+    Usage for avro schemas
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-for-json-schemas" class="md-nav__link">
+    Usage for json schemas
   </a>
   
 </li>
@@ -359,8 +366,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
+  <a href="#usage-for-avro-schemas" class="md-nav__link">
+    Usage for avro schemas
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-for-json-schemas" class="md-nav__link">
+    Usage for json schemas
   </a>
   
 </li>
@@ -419,17 +433,16 @@
                   
                 
                 
-                <h1 id="message-serializer">Message Serializer</h1>
-<p>Class that serialize and deserialize messages. It interacts with the <code>SchemaRegistryClient</code> to get <code>Avro Schemas</code> in order to process messages. In your application you will intereact with it.</p>
-<h2 id="usage">Usage</h2>
+                <h1 id="message-serializers">Message Serializers</h1>
+<p>To serialize and deserialize messages you can use <code>AvroMessageSerializer</code> and <code>JsonMessageSerializer</code>. They interact with the <code>SchemaRegistryClient</code> to get <code>avro Schemas</code>  and <code>json schemas</code> in order to process messages.</p>
+<p><em>If you want to run the following examples run <code>docker-compose up</code> and the <code>schema registry server</code> will run on <code>http://127.0.0.1:8081</code></em></p>
+<h2 id="usage-for-avro-schemas">Usage for avro schemas</h2>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span><span class="p">,</span> <span class="n">schema</span>
-<span class="kn">from</span> <span class="nn">schema_registry.serializers</span> <span class="kn">import</span> <span class="n">MessageSerializer</span>
+<span class="kn">from</span> <span class="nn">schema_registry.serializers</span> <span class="kn">import</span> <span class="n">AvroMessageSerializer</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="s2">&quot;http://127.0.0.1:8080&quot;</span><span class="p">)</span>
 
-<span class="n">message_serializer</span> <span class="o">=</span> <span class="n">MessageSerializer</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
-
-<span class="c1"># Let&#39;s imagine that we have the foillowing schema.</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="s2">&quot;http://127.0.0.1:8081&quot;</span><span class="p">)</span>
+<span class="n">avro_message_serializer</span> <span class="o">=</span> <span class="n">AvroMessageSerializer</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
 
 <span class="n">avro_user_schema</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">AvroSchema</span><span class="p">({</span>
     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;record&quot;</span><span class="p">,</span>
@@ -450,15 +463,16 @@
     <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="n">message_encoded</span> <span class="o">=</span> <span class="n">message_serializer</span><span class="o">.</span><span class="n">encode_record_with_schema</span><span class="p">(</span>
+<span class="c1"># Encode the record</span>
+<span class="n">message_encoded</span> <span class="o">=</span> <span class="n">avro_message_serializer</span><span class="o">.</span><span class="n">encode_record_with_schema</span><span class="p">(</span>
     <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">avro_user_schema</span><span class="p">,</span> <span class="n">user_record</span><span class="p">)</span>
 
 <span class="c1"># this is because the message encoded reserved 5 bytes for the schema_id</span>
 <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">message_encoded</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span>
 <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message_encoded</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
 
-<span class="c1"># now decode the message</span>
-<span class="n">message_decoded</span> <span class="o">=</span> <span class="n">message_serializer</span><span class="o">.</span><span class="n">decode_message</span><span class="p">(</span><span class="n">message_encoded</span><span class="p">)</span>
+<span class="c1"># Decode the message</span>
+<span class="n">message_decoded</span> <span class="o">=</span> <span class="n">avro_message_serializer</span><span class="o">.</span><span class="n">decode_message</span><span class="p">(</span><span class="n">message_encoded</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">message_decoded</span> <span class="o">==</span> <span class="n">user_record</span>
 
 <span class="c1"># Now if we send a bad record</span>
@@ -468,13 +482,67 @@
     <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="s2">&quot;my_age&quot;</span>
 <span class="p">}</span>
 
-<span class="n">message_serializer</span><span class="o">.</span><span class="n">encode_record_with_schema</span><span class="p">(</span>
+<span class="n">avro_message_serializer</span><span class="o">.</span><span class="n">encode_record_with_schema</span><span class="p">(</span>
     <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">avro_user_schema</span><span class="p">,</span> <span class="n">bad_record</span><span class="p">)</span>
-<span class="c1"># results in an error:</span>
-<span class="c1">#   TypeError: unsupported operand type(s) for &lt;&lt;: &#39;str&#39; and &#39;int&#39;</span>
+
+<span class="c1"># &gt;&gt;&gt; TypeError: an integer is required on field age</span>
 </code></pre></div>
 
 
+<p><em>(This script is complete, it should run "as is")</em></p>
+<h2 id="usage-for-json-schemas">Usage for json schemas</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span><span class="p">,</span> <span class="n">schema</span>
+<span class="kn">from</span> <span class="nn">schema_registry.serializers</span> <span class="kn">import</span> <span class="n">JsonMessageSerializer</span>
+
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="s2">&quot;http://127.0.0.1:8081&quot;</span><span class="p">)</span>
+<span class="n">json_message_serializer</span> <span class="o">=</span> <span class="n">JsonMessageSerializer</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+
+<span class="n">json_schema</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">JsonSchema</span><span class="p">({</span>
+  <span class="s2">&quot;definitions&quot;</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;record:python.test.basic.basic&quot;</span> <span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span> <span class="p">:</span> <span class="s2">&quot;basic schema for tests&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;required&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;properties&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;number&quot;</span> <span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;oneOf&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="p">},</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+          <span class="p">}</span> <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;oneOf&quot;</span> <span class="p">:</span> <span class="p">[</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">}</span> <span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;$ref&quot;</span> <span class="p">:</span> <span class="s2">&quot;#/definitions/record:python.test.basic.basic&quot;</span>
+<span class="p">})</span>
+
+<span class="c1"># Encode the record</span>
+<span class="n">basic_record</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;a_name&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">message_encoded</span> <span class="o">=</span> <span class="n">json_message_serializer</span><span class="o">.</span><span class="n">encode_record_with_schema</span><span class="p">(</span>
+    <span class="s2">&quot;basic&quot;</span><span class="p">,</span> <span class="n">json_schema</span><span class="p">,</span> <span class="n">basic_record</span><span class="p">)</span>
+
+<span class="c1"># this is because the message encoded reserved 5 bytes for the schema_id</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">message_encoded</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message_encoded</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
+
+<span class="c1"># Decode the message</span>
+<span class="n">message_decoded</span> <span class="o">=</span> <span class="n">json_message_serializer</span><span class="o">.</span><span class="n">decode_message</span><span class="p">(</span><span class="n">message_encoded</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">message_decoded</span> <span class="o">==</span> <span class="n">basic_record</span>
+</code></pre></div>
+
+
+<p><em>(This script is complete, it should run "as is")</em></p>
 <h2 id="class-and-methods">Class and Methods</h2>
 <div class="codehilite"><pre><span></span><code><span class="n">MessageSerializer</span>
     <span class="n">Args</span><span class="p">:</span>
@@ -482,7 +550,7 @@
 </code></pre></div>
 
 
-<h4 id="encode-record-with-a-schema">Encode record with a <code>Schema</code></h4>
+<h3 id="encode-record-with-a-schema">Encode record with a <code>Schema</code></h3>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">encode_record_with_schema</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
@@ -496,7 +564,7 @@
 </code></pre></div>
 
 
-<h4 id="encode-a-record-with-a-schema-id">Encode a record with a <code>schema id</code></h4>
+<h3 id="encode-a-record-with-a-schema-id">Encode a record with a <code>schema id</code></h3>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">encode_record_with_schema_id</span><span class="p">(</span><span class="n">schema_id</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
@@ -509,7 +577,7 @@
 </code></pre></div>
 
 
-<h4 id="decode-a-message-encoded-previously">Decode a message encoded previously</h4>
+<h3 id="decode-a-message-encoded-previously">Decode a message encoded previously</h3>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">decode_message</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>

@@ -674,13 +674,13 @@ and use it in the API for <code>register schemas</code>, <code>check versions</c
 
 <p>Run code linting:</p>
 <div class="codehilite"><pre><span></span><code>./scripts/lint
+</code></pre></div>
 
-To perform tests using the python shell you can execute <span class="sb">`</span>docker-compose up<span class="sb">`</span> and the <span class="sb">`</span>schema registry server<span class="sb">`</span> will run on <span class="sb">`</span>http://127.0.0.1:8081<span class="sb">`</span>, the you can interact against it using the <span class="sb">`</span>SchemaRegistryClient<span class="sb">`</span>:
 
-<span class="sb">```</span>python
-from schema_registry.client import SchemaRegistryClient, schema
+<p>To perform tests using the python shell you can execute <code>docker-compose up</code> and the <code>schema registry server</code> will run on <code>http://127.0.0.1:8081</code>, the you can interact against it using the <code>SchemaRegistryClient</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">schema_registry.client</span> <span class="kn">import</span> <span class="n">SchemaRegistryClient</span><span class="p">,</span> <span class="n">schema</span>
 
-<span class="nv">client</span> <span class="o">=</span> SchemaRegistryClient<span class="o">(</span><span class="nv">url</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8081&quot;</span><span class="o">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">SchemaRegistryClient</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8081&quot;</span><span class="p">)</span>
 
 <span class="c1"># do some operations with the client...</span>
 </code></pre></div>
